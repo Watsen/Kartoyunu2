@@ -12,12 +12,16 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST']
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
 
 const transfermarktService = new TransfermarktService();
@@ -58,7 +62,7 @@ app.get('/api/players/:id', async (req, res) => {
 
 const socketService = new SocketService(io);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, () => {
   console.log(`Server ${PORT} portunda çalışıyor`);
 }); 

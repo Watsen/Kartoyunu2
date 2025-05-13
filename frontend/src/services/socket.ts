@@ -6,7 +6,10 @@ class SocketService {
   private static instance: SocketService;
 
   private constructor() {
-    this.socket = io('http://localhost:3001');
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    this.socket = io(API_URL, {
+      withCredentials: true
+    });
   }
 
   static getInstance(): SocketService {
