@@ -83,7 +83,7 @@ export class SocketService {
           if (allPlayersReady) {
             room.gameStatus = 'playing';
             room.currentRound = 1;
-            room.currentCategory = this.categoryService.getRandomCategory();
+            room.currentCategory = this.categoryService.getRandomCategories();
           }
 
           this.emitGameState(roomId);

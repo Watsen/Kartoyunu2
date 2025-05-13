@@ -38,16 +38,14 @@ export class TransfermarktService {
         if (name && url) {
           const id = parseInt(url.split('/').pop() || '0');
           players.push({
-            id,
+            id: String(id),
             name,
-            firstGoalAge: 0,
-            totalGoals: 0,
-            headGoals: 0,
-            positionsPlayed: 0,
-            teamsPlayed: 0,
-            championships: [],
-            ageAsCoach: null,
-            photoUrl: ''
+            imageUrl: '',
+            stats: {
+              goals: 0,
+              assists: 0,
+              championships: 0
+            }
           });
         }
       });
@@ -80,16 +78,14 @@ export class TransfermarktService {
 
       const $ = cheerio.load(response.data);
       const player: Player = {
-        id: playerId,
+        id: String(playerId),
         name: $('.data-header__headline-wrapper').text().trim(),
-        firstGoalAge: this.extractFirstGoalAge($),
-        totalGoals: this.extractTotalGoals($),
-        headGoals: this.extractHeadGoals($),
-        positionsPlayed: this.extractPositionsPlayed($),
-        teamsPlayed: this.extractTeamsPlayed($),
-        championships: this.extractChampionships($),
-        ageAsCoach: this.extractAgeAsCoach($),
-        photoUrl: $('.data-header__profile-image').attr('src') || ''
+        imageUrl: $('.data-header__profile-image').attr('src') || '',
+        stats: {
+          goals: this.extractTotalGoals($),
+          assists: 0,
+          championships: this.extractChampionships($).length
+        }
       };
 
       await this.redisClient.set(cacheKey, JSON.stringify(player), {
