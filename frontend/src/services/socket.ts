@@ -19,7 +19,7 @@ class SocketService {
     return SocketService.instance;
   }
 
-  getSocketId(): string {
+  getSocketId(): string | undefined {
     return this.socket.id;
   }
 
