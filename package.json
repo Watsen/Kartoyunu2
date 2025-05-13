@@ -1,0 +1,12 @@
+{
+  "name": "7-futbolcu-kapismasi",
+  "version": "1.0.0",
+  "description": "Online 1v1 futbolcu bilgi yarışması oyunu",
+  "scripts": {
+    "start": "concurrently \"cd frontend && npm start\" \"cd backend && npm start\"",
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
