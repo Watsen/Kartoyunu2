@@ -10,16 +10,30 @@ dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
+
+const allowedOrigins = [
+  'https://kartoyunu2.vercel.app',
+  'https://kartoyunu2-6td6nhlst-watsen03s-projects.vercel.app',
+  'https://kartoyunu2-git-main-watsen03s-projects.vercel.app',
+  // Gerekirse diğer Vercel preview URL'lerini de ekle
+];
+
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL,
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   }
 });
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
