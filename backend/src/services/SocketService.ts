@@ -32,15 +32,17 @@ export class SocketService {
     this.io.on('connection', (socket: Socket) => {
       console.log('Yeni bağlantı:', socket.id);
 
-      socket.on('createRoom', async (playerName: string) => {
+      socket.on('createRoom', async (playerName: string, callback) => {
         try {
           console.log('Oda oluşturma isteği geldi:', playerName);
           const roomId = await this.roomManager.createRoom(socket.id, playerName);
           console.log('Oda oluşturuldu:', roomId);
           socket.join(roomId);
           this.emitGameState(roomId);
+          if (callback) callback({ roomId });
         } catch (error) {
           console.error('Oda oluşturulamadı:', error);
+          if (callback) callback({ error: 'Oda oluşturulamadı' });
           socket.emit('error', 'Oda oluşturulamadı');
         }
       });
